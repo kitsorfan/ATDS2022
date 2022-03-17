@@ -1,42 +1,26 @@
-from pyspark.sql import SparkSession
-import time
-import sys
++---------------+------------------+----------------------+
+|          Genre|MeanRatingPerGenre|NumberOfMoviesPerGenre|
++---------------+------------------+----------------------+
+|         Action| 3.158532929451069|                  1175|
+|      Adventure|  3.16870906252558|                   707|
+|      Animation|3.1758854560200147|                   223|
+|         Comedy|3.1370494677399536|                  2113|
+|          Crime|  3.16258393788823|                   907|
+|    Documentary|3.0742356093239853|                   503|
+|          Drama|3.1391216242914526|                  3724|
+|         Family|3.1569054919202837|                   386|
+|        Fantasy|3.1429135219007014|                   463|
+|        Foreign|3.1139858344079134|                   271|
+|        History|3.1187910458495405|                   306|
+|         Horror| 3.134020262392474|                   723|
+|          Music|3.1890477821347667|                   248|
+|        Mystery|3.1487693926555473|                   475|
+|        Romance| 3.156277701839364|                  1206|
+|Science Fiction| 3.157163683913988|                   593|
+|       TV Movie| 3.148118069220997|                    87|
+|       Thriller|3.1482817481660925|                  1427|
+|            War|3.1146633826061416|                   231|
+|        Western|3.2140607181871017|                   185|
++---------------+------------------+----------------------+
 
-spark = SparkSession.builder.appName("query1-sql").getOrCreate()
-
-start_time = time.time()
-
-if sys.argv[1] == "csv":
-        movie_genres = spark.read.format("csv").options(header='false', inferSchema='true').load("hdfs://master:9000/project/movie_genres.csv")
-        ratings = spark.read.format("csv").options(header='false', inferSchema='true').load("hdfs://master:9000/project/ratings.csv")
-elif sys.argv[1] == "parquet":
-        movie_genres = spark.read.parquet("hdfs://master:9000/project/movie_genres.parquet")
-        ratings = spark.read.parquet("hdfs://master:9000/project/ratings.parquet")
-else:
-        print("Invalid argument")
-
-movie_genres.createOrReplaceTempView("movie_genres")
-ratings.createOrReplaceTempView("ratings")
-
-rating_per_movie = "select avg(R._c2) as avg_rating, R._c1 as movie_id from ratings as R group by R._c1"
-rating_per_movie = spark.sql(rating_per_movie)
-rating_per_movie.createOrReplaceTempView("rating_per_movie")
-
-rating_per_genre = "select rpm.avg_rating as RATING, movie_genres._c1 as GENRE from rating_per_movie as rpm join movie_genres on rpm.movie_id = movie_genres._c0"
-rating_per_genre = spark.sql(rating_per_genre)
-rating_per_genre.createOrReplaceTempView("rating_per_genre")
-
-temp = "select RG.GENRE as Movie_Genre, avg(RG.RATING) as Average_Genre_Rating, count(*) as Movies_Count from rating_per_genre as RG group by RG.GENRE"
-temp = spark.sql(temp)
-temp.createOrReplaceTempView("temp")
-
-#RG.RATING is not null and RG.GENRE is not null
-
-sqlString = "select * from temp as t order by t.Movie_Genre"
-
-res = spark.sql(sqlString)
-res.show()
-
-print("#########################################")
-print("Elapsed time = %.2f" % (time.time() - start_time))
-print("#########################################")
+Total time: 91.628 sec
