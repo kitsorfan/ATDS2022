@@ -1,40 +1,21 @@
-from pyspark.sql import SparkSession
-from io import StringIO
-import csv
-import time
-
-spark = SparkSession.builder.appName("query1-rdd").getOrCreate()
-
-sc = spark.sparkContext
-
-start_time = time.time()
-
-def split_complex(x):
-        return list(csv.reader(StringIO(x), delimiter=','))[0]
-
-
-mean_rating_per_movie = \
-        sc.textFile("hdfs://master:9000/project/ratings.csv"). \
-        map(lambda x: split_complex(x)). \
-        map(lambda x: (x[1],(x[2],1))). \
-        reduceByKey(lambda x,y:  (float(x[0])+float(y[0]),int(x[1])+int(y[1]))). \
-        map(lambda x: (x[0], float(x[1][0])/int(x[1][1])))
-
-movie_genre = \
-        sc.textFile("hdfs://master:9000/project/movie_genres.csv"). \
-        map(lambda x: split_complex(x)). \
-        map(lambda x: (x[0],x[1]))
-
-res = mean_rating_per_movie.join(movie_genre). \
-        map(lambda x: (x[1][1],(x[1][0],1))). \
-        reduceByKey(lambda x,y: (float(x[0])+float(y[0]),int(x[1])+int(y[1]))). \
-        map(lambda x: (x[0],(float(x[1][0])/int(x[1][1]),x[1][1])))
-
-
-for i in res.collect():
-        print(i)
-
-print("##############################")
-print("Elapsed time = %.2f" % (time.time()-start_time))
-print("##############################")
-~
+('Romance', (3.156, 1206))
+('Western', (3.214, 185))
+('Crime', (3.163, 907))
+('Drama', (3.139, 3724))
+('Action', (3.159, 1175))
+('Comedy', (3.137, 2113))
+('Horror', (3.134, 723))
+('Music', (3.189, 248))
+('TV Movie', (3.148, 87))
+('Science Fiction', (3.157, 593))
+('Animation', (3.176, 223))
+('Adventure', (3.169, 707))
+('Thriller', (3.148, 1427))
+('History', (3.119, 306))
+('Family', (3.157, 386))
+('Mystery', (3.149, 475))
+('Fantasy', (3.143, 463))
+('Foreign', (3.114, 271))
+('War', (3.115, 231))
+('Documentary', (3.074, 503))
+Total time: 74.591 sec
