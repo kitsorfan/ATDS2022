@@ -35,13 +35,13 @@ def isDrama(x):
                 return []
 
 def timePeriod(year):
-        if 2000<=year and year<=2004:
+        if 2000<=year and year<2005:
                 return "2000-2004"
-        elif 2005<=year and year<=2009:
+        elif 2005<=year and year<2010:
                 return "2005-2009"
-        elif 2010<=year and year<=2014:
+        elif 2010<=year and year<2015:
                 return "2010-2014"
-        elif 2015<=year and year<=2019:
+        elif 2015<=year and year<2020:
                 return "2015-2019"
 
 def countWordsTimePeriod(x):
