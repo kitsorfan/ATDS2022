@@ -17,12 +17,11 @@ ratings.csv
 0-userID, 1-movieID, 2-rating, 3-ratingDate
 """
 
-spark = SparkSession.builder.appName("Q1_SQL_csv").getOrCreate()
+spark = SparkSession.builder.appName("Q1_SQL_parquet").getOrCreate()
 
 startTime = time.time()
 
-
-movies = spark.read.format("csv").options(header='false', inferSchema='true').load("hdfs://master:9000/files/movies.csv")
+movies = spark.read.parquet("hdfs://master:9000/files/movies.parquet")
 
 # We have a table movies
 movies.registerTempTable("movies")
