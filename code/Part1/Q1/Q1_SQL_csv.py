@@ -4,7 +4,6 @@
 from pyspark.sql import SparkSession
 
 import time
-import sys
 
 """
 movie_genres.csv
