@@ -1,33 +1,48 @@
+# NTUA ECE, 9th Semester, ATDS
+# Stylianos Kandylakis, Kitsos Orfanopoulos, Christos Tsoufis
+
 from pyspark.sql import SparkSession
+
 import time
-import sys
 
-spark = SparkSession.builder.appName("query1-sql").getOrCreate()
+"""
+movie_genres.csv
+0-movieID, 1-genre
 
-start_time = time.time()
+movies.csv
+0-movieID, 1-title, 2-description, 3-releaseDate, 4-duration, 5-cost, 6-revenue
 
-if sys.argv[1] == "csv":
-        ratings = spark.read.format("csv").options(header='false', inferSchema='true').load("hdfs://master:9000/project/ratings.csv")
-elif sys.argv[1] == "parquet":
-        ratings = spark.read.parquet("hdfs://master:9000/project/ratings.parquet")
-else:
-        print("Invalid argument")
+ratings.csv
+0-userID, 1-movieID, 2-rating, 3-ratingDate
+"""
 
+spark = SparkSession.builder.appName("Q2_SQL_csv").getOrCreate()
+
+startTime = time.time()
+
+ratings = spark.read.format("csv").options(header='false', inferSchema='true').load("hdfs://master:9000/files/ratings.csv")
 ratings.createOrReplaceTempView("ratings")
 
-rating_per_user = "select avg(_c2) as AVG_RATING, _c0 as USER from ratings group by _c0"
-rating_per_user = spark.sql(rating_per_user)
-rating_per_user.createOrReplaceTempView("rating_per_user")
+query1 = """
+        SELECT 
+                AVG(_c2) as meanRating, 
+                _c0 AS user 
+        FROM ratings 
+        GROUP BY _c0
+        """
+meanUserRating = spark.sql(query1)
+meanUserRating.createOrReplaceTempView("meanUserRating")
 
-all_users = "select count(*) as CNT from rating_per_user"
-#all_users = spark.sql(all_users)
-#all_users.createOrReplaceTempView("all_users")
+all_users = "SELECT COUNT(*) FROM meanUserRating"
 
-sqlString = "select (count(*)/("+all_users+")*100) as USER_PERCENTAGE from rating_per_user as RU where RU.AVG_RATING>3"
+query2 = """
+        SELECT (COUNT(*)/("""+all_users+""")*100) AS goodUsers 
+        FROM meanUserRating AS mru 
+        WHERE mru.meanRating>3.0"""
 
-res = spark.sql(sqlString)
-res.show()
+sqlQ2 = spark.sql(query2)
+sqlQ2.show()
 
-print("#########################################")
-print("Elapsed time = %.2f" % (time.time() - start_time))
-print("#########################################")
+endTime = time.time() 
+
+print("Total time: " + str(round(endTime-startTime,3))+" sec")
