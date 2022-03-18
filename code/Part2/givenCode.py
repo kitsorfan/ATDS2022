@@ -32,7 +32,7 @@ sqlString = """
 
 t1 = time.time()
 
-spark.sql(sqlString).show()
+spark.sql(sqlString).collect()
 
 t2 = time.time()
 
