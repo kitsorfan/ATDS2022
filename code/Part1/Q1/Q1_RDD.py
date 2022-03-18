@@ -19,8 +19,9 @@ ratings.csv
 """
 
 spark = SparkSession.builder.appName("Q1_RDD").getOrCreate()
-
 sc = spark.sparkContext
+sc.setLogLevel("WARN") # to reduce verbocity
+
 startTime = time.time()
 
 def splitComma(x):

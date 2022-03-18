@@ -17,6 +17,8 @@ ratings.csv
 """
 
 spark = SparkSession.builder.appName("Q3_SQL_csv").getOrCreate()
+sc = spark.sparkContext
+sc.setLogLevel("WARN") # to reduce verbocity
 
 startTime = time.time()
 
