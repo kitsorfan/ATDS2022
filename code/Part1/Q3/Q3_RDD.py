@@ -12,7 +12,7 @@ movie_genres.csv
 0-movieID, 1-genre
 
 movies.csv
-0-movieID, 1-title, 2-description, 3-releaseDate, 4-duration, 5-cost, 6-revenue
+0-movieID, 1-title, 2-description, 3-releaseDate, 4-duration, 5-cost, 6-revenue, 7-popularity
 
 ratings.csv
 0-userID, 1-movieID, 2-rating, 3-ratingDate
