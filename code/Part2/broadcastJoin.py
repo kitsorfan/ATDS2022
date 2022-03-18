@@ -2,7 +2,7 @@
 # Stylianos Kandylakis, Kitsos Orfanopoulos, Christos Tsoufis
 
 
-# Broadcast join. Also this works exercise B3
+# Broadcast join. Also this is the solution for exercise B3
 
 from pyspark.sql import SparkSession
 import csv
@@ -36,7 +36,8 @@ def splitComma(x):
 
  
 # O1. We have a (key, (tupleOfLogValues)) 
-# O2
+# O2. We get HashMap(key) and check if it is None
+# 03. If not we join the two values from logTable and HashTable to one list
 def ourJoin(key, logValue):
         joined = []
         if HashMap.value.get(key, None) == None: # if key doesn't exist return empty list
