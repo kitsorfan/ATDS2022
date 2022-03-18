@@ -19,4 +19,4 @@
 ('Thriller', ('8659', 725, 'The Thomas Crown Affair', '5.0', 'The Day After Tomorrow', '2.0'))
 ('War', ('45811', 120, 'Doctor Zhivago', '5.0', 'The Great Escape', '0.5'))
 ('Western', ('45811', 84, 'Johnny Guitar', '5.0', 'Firecreek', '1.0'))
-Total time: 579.845 sec
+Total time: 384.845 sec
