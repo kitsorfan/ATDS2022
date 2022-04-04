@@ -20,4 +20,4 @@ ratings=spark.read.csv('hdfs://master:9000/files/ratings.csv')
 ratings.write.parquet('hdfs://master:9000/files/ratings.parquet')
 
 
-# COmpile & Run from master:  spark-submit csv_to_parquet.py
+# Cοmpile & Run from master:  spark-submit csv_to_parquet.py
