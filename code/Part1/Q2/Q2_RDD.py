@@ -39,7 +39,7 @@ def seperator(x):
 # 1. Split comma
 # 2. create (userID, (rating, 1))
 # 3. aggregate (userID, totalRatingValue, totalRatings)
-# 4. create (1,(1,1)) for "good", (1,(0,0)) for "bad"    (userID in now considered same for all)
+# 4. create (1,(1,1)) for "good", (1,(0,1)) for "bad"    (userID in now considered same for all)
 # 5. aggregate "good"s and "bad"s
 # 6. calculate percentage
 rdd = \
